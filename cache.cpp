@@ -1,4 +1,5 @@
 #include<iostream>
+#include<memory>
 
 using namespace std;
 
@@ -70,9 +71,10 @@ class Cache{
 private:
 public:
     int capacity;
-    EvictionPolicy* evictionPolicy;
-    Storage* storage;
-    Cache(int capacity, EvictionPolicy* evictionPolicy, Storage* storage){
+    shared_ptr<EvictionPolicy>evictionPolicy;
+    shared_ptr<Storage>storage;
+
+    Cache(int capacity, shared_ptr<EvictionPolicy> evictionPolicy, shared_ptr<Storage> storage){
         this -> capacity = capacity;
         this -> evictionPolicy = evictionPolicy;
         this -> storage = storage;
@@ -81,7 +83,8 @@ public:
 
 
 int main(){
-    Cache* c = new Cache(10, new LRUEvictionPolicy(), new HashMapStorage());
+
+    Cache* c = new Cache(10, make_shared<LRUEvictionPolicy>(), make_shared<HashMapStorage>());
     c -> evictionPolicy -> say(); 
     c -> storage -> say();
 
